@@ -1,13 +1,17 @@
 package com.example.firebasedemo;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +19,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -59,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
                 titleIn.getText().clear();
                 priceIn.getText().clear();
                 isbnIn.getText().clear();
+
+                closeKeyboard();
             }
         });
 
@@ -101,7 +108,16 @@ public class MainActivity extends AppCompatActivity {
 
         //example Firestore UI RecyclerView
         setUpRecyclerView();
+    }
 
+    private void closeKeyboard()
+    {
+        View view = this.getCurrentFocus();
+        if (view != null)
+        {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     private void setUpRecyclerView(){
@@ -120,6 +136,35 @@ public class MainActivity extends AppCompatActivity {
         //recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+
+        //note as we are not using up and down gestures the first argument is 0
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                adapter.deleteItem(viewHolder.getAdapterPosition());
+            }
+        }).attachToRecyclerView(recyclerView);
+
+        //implement interface from book adapter so Main activity can recieve data from the adapter
+        adapter.setOnItemClickListener(new BookAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                //Use documentSnapshot to create object
+                Book book = documentSnapshot.toObject(Book.class);
+                //you can now access the book members variables .. book.getTitle() etc etc
+                //document snapshot also has many powerful capabilities
+                //https://firebase.google.com/docs/reference/android/com/google/firebase/firestore/DocumentSnapshot
+                String id = documentSnapshot.getId();
+                Toast.makeText(MainActivity.this, "Position:" + position + " ID:" +  id, Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
     @Override

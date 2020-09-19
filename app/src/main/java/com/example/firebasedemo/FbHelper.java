@@ -45,7 +45,7 @@ public class FbHelper {
     public void addBook(Book b) {
         Map<String, Object> book = new HashMap<>();
         book.put("Title", b.getTitle());
-        book.put("ISBN", b.getIsbn());
+        book.put("ISBN", b.getISBN());
         book.put("Author", b.getAuthor());
         book.put("Price", b.getPrice());
 

@@ -2,59 +2,59 @@ package com.example.firebasedemo;
 
 public class Book {
 
-    private String author;
-    private String title;
-    private int price;
-    private String isbn;
+    private String Author;
+    private String Title;
+    private int Price;
+    private String ISBN;
 
-    public Book(String author, String title, int price, String isbn) {
-        this.author = author;
-        this.title = title;
-        this.price = price;
-        this.isbn = isbn;
+    public Book(String author, String title, int price, String ISBN) {
+        Author = author;
+        Title = title;
+        Price = price;
+        this.ISBN = ISBN;
     }
 
     public Book() { }  //empty constructor needed
 
     public String getAuthor() {
-        return author;
+        return Author;
     }
 
     public void setAuthor(String author) {
-        this.author = author;
+        Author = author;
     }
 
     public String getTitle() {
-        return title;
+        return Title;
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        Title = title;
     }
 
     public int getPrice() {
-        return price;
+        return Price;
     }
 
     public void setPrice(int price) {
-        this.price = price;
+        Price = price;
     }
 
-    public String getIsbn() {
-        return isbn;
+    public String getISBN() {
+        return ISBN;
     }
 
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
+    public void setISBN(String ISBN) {
+        this.ISBN = ISBN;
     }
 
     @Override
     public String toString() {
         return "Book{" +
-                "author='" + author + '\'' +
-                ", title='" + title + '\'' +
-                ", price='" + price + '\'' +
-                ", isbn='" + isbn + '\'' +
+                "Author='" + Author + '\'' +
+                ", Title='" + Title + '\'' +
+                ", Price=" + Price +
+                ", ISBN='" + ISBN + '\'' +
                 '}';
     }
 }
