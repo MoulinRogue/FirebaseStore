@@ -106,6 +106,9 @@ public class MainActivity extends AppCompatActivity {
         fbHelper.updatePrice("55667722", 2000);
         fbHelper.updatePrice("234567", 4 );
 
+        //delete book in database
+        fbHelper.deleteBook("55667722");
+
         //example Firestore UI RecyclerView
         setUpRecyclerView();
     }
@@ -121,8 +124,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpRecyclerView(){
-        Query query = bookRef.orderBy("Price").limit(50);
-        //Query query = db.collection("Books").orderBy("Author", Query.Direction.ASCENDING);
+        //Query query = bookRef.orderBy("Price").limit(50);  <<this works, its just another option
+        Query query = db.collection("Books").orderBy("Author", Query.Direction.ASCENDING);
         Log.d(RECTAG, "Built recycler query");
         FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(query, Book.class)
@@ -162,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                 //https://firebase.google.com/docs/reference/android/com/google/firebase/firestore/DocumentSnapshot
                 String id = documentSnapshot.getId();
                 Toast.makeText(MainActivity.this, "Position:" + position + " ID:" +  id, Toast.LENGTH_SHORT).show();
-
+                //I just used a toast as an example but you could open another Activity, all sorts of things
             }
         });
     }
